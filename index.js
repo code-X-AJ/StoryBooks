@@ -16,7 +16,6 @@ dotenv.config({ path: "./config/config.env" });
 // passport config
 require("./config/passport")(passport);
 
-connectDB();
 const app = express();
 
 // Body Parser
@@ -85,11 +84,16 @@ app.use(express.static(path.join(__dirname, "public")));
 // Routes
 app.use("/", require("./routes/index"));
 app.use("/auth", require("./routes/auth"));
-app.use("/stories", require("./routes/stories"));
+app.use("/stowries", require("./routes/stories"));
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(
-  PORT,
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
-);
+async function startServer(){
+  await connectDB();
+  app.listen(
+    PORT,
+    console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
+  );
+}
+
+startServer();
